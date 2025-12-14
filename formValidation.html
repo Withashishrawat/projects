@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Email validator</title>
+    <link rel="icon" href="image.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f2f2f2;
+    }
+
+    .my-form {
+        width: 300px;
+        background: white;
+        padding: 20px;
+        margin: 100px auto;
+        border-radius: 5px;
+    }
+
+    .my-form label {
+        display: block;
+        margin-top: 10px;
+    }
+
+    .my-form input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+    }
+
+    .my-form button {
+        margin-top: 15px;
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+    }
+
+    .error {
+        color: red;
+        display: none;
+    }
+</style>
+
+<body>
+
+    <form class="my-form">
+        <h2>Registration Form</h2>
+
+        <label>Name</label>
+        <input type="text" id="name" placeholder="Enter your name">
+
+        <label>Email</label>
+        <input type="text" id="email" placeholder="Enter your email">
+        <small id="email-error" class="error"></small>
+
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter password">
+        <small id="password-error" class="error"></small>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const form = document.querySelector(".my-form");
+        const email = document.getElementById("email");
+        const password = document.getElementById("password");
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            document.querySelector("#email-error").textContent = "";
+            document.querySelector("#password-error").textContent = "";
+
+            /*Define regex patterns*/
+            const emailRegex = /^[a-zA-Z0-9]+([._%+-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/;
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+            /*  Validate email and password*/
+            const emailAns = emailRegex.test(email.value);
+            const passwordAns = passwordRegex.test(password.value);
+
+            const isValid = true;
+
+            /* Show error messages if validation fails*/
+            if (!emailAns) {
+                document.querySelector("#email-error").innerText = "Invalid email format.";
+                document.querySelector("#email-error").style.display = "initial";
+                isValid = false;
+            }
+
+            if (!passwordAns) {
+                document.querySelector("#password-error").innerText = "Invalid password format.";
+                document.querySelector("#password-error").style.display = "initial";
+                isValid = false;
+            }
+
+            /*if you want to use separate flags for email and password validation */
+            // if (emailAns && passwordAns) {
+            //     alert("Form submitted successfully!");
+            //     form.reset();
+            // }
+
+
+            /* If all validations pass*/
+            if (isValid) {
+                alert("Form submitted successfully!");
+                form.reset();
+            }
+
+        });
+
+    </script>
+</body>
+
+</html>
