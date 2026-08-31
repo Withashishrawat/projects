@@ -1,59 +1,1015 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>to-do</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PercentPro - Discount & Percent Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --green-primary: #10b981;
+            --green-light: #34d399;
+            --green-lighter: #a7f3d0;
+            --green-dark: #047857;
+            --green-glow: rgba(16, 185, 129, 0.4);
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-shadow: 0 8px 32px rgba(16, 185, 129, 0.2);
+            --text-primary: #1a1a2e;
+            --text-secondary: #3d3d5c;
+            --text-light: #ffffff;
+            --bg-gradient-1: #ecfdf5;
+            --bg-gradient-2: #d1fae5;
+            --bg-gradient-3: #a7f3d0;
+            --bg-gradient-4: #6ee7b7;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 25%, var(--bg-gradient-3) 50%, var(--bg-gradient-4) 100%);
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background blobs */
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
+            animation: blobFloat 8s ease-in-out infinite;
+        }
+
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: #6ee7b7;
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            width: 350px;
+            height: 350px;
+            background: #34d399;
+            bottom: -80px;
+            right: -80px;
+            animation-delay: -3s;
+        }
+
+        .blob-3 {
+            width: 300px;
+            height: 300px;
+            background: #a7f3d0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -5s;
+            opacity: 0.4;
+        }
+
+        @keyframes blobFloat {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            25% {
+                transform: translate(30px, -40px) scale(1.1);
+            }
+
+            50% {
+                transform: translate(-20px, 25px) scale(0.95);
+            }
+
+            75% {
+                transform: translate(15px, 35px) scale(1.05);
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 24px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #047857, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .header .badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 18px;
+            border-radius: 50px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--green-dark);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 22px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            color: var(--text-secondary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background: rgba(16, 185, 129, 0.25);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: var(--green-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.25);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #10b981, #047857);
+            border-color: transparent;
+            color: #fff;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Main Card */
+        .main-card {
+            border-radius: 28px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            padding: 30px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Grid Layout */
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .calc-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .main-card {
+                padding: 18px;
+            }
+        }
+
+        /* Input Section */
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .input-group label .value-display {
+            color: var(--green-dark);
+            font-weight: 700;
+            font-size: 1rem;
+            background: rgba(16, 185, 129, 0.12);
+            padding: 2px 12px;
+            border-radius: 50px;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .input-group input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 50px;
+            background: linear-gradient(90deg, #a7f3d0, #10b981);
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .input-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid var(--green-primary);
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.4);
+            transition: all 0.2s;
+        }
+
+        .input-group input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 4px 18px rgba(16, 185, 129, 0.6);
+        }
+
+        .input-group input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid var(--green-primary);
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.4);
+        }
+
+        .input-group input[type="number"] {
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.5);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .input-group input[type="number"]:focus {
+            border-color: var(--green-primary);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .input-group input[type="number"]::-webkit-inner-spin-button {
+            opacity: 1;
+        }
+
+        /* Results */
+        .results-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .result-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .result-card:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+        }
+
+        .result-card .label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .result-big {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #047857, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+
+        .result-small {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Button */
+        .btn-primary {
+            padding: 12px 24px;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(135deg, #10b981, #047857);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+            text-transform: uppercase;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.5);
+            background: linear-gradient(135deg, #34d399, #059669);
+        }
+
+        .btn-secondary {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            background: rgba(255, 255, 255, 0.3);
+            color: var(--green-dark);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.3px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--green-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.3px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title .icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(16, 185, 129, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 16px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            opacity: 0.7;
+            letter-spacing: 0.3px;
+        }
+
+        .mode-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--green-dark);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .tabs {
+                gap: 4px;
+            }
+
+            .tab-btn {
+                padding: 8px 12px;
+                font-size: 0.7rem;
+            }
+
+            .result-big {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <div id="container">
-    <div id="input-container">
-      <input type="text" id="text-input" placeholder="add" />
-      <input type="button" value="submit" id="submit-btn" />
-      <input type="button" value="Remove all" id="remove-all" />
+    <!-- Background Blobs -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧮 PercentPro</h1>
+            <p>Smart Percent & Discount Calculator — Green Glassmorphism Edition</p>
+            <span class="badge">🌿 Fresh & Intuitive</span>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs" id="tabs">
+            <button class="tab-btn active" data-tab="basic">📊 Basic Percent</button>
+            <button class="tab-btn" data-tab="change">📈 Percent Change</button>
+            <button class="tab-btn" data-tab="discount">🏷️ Discount</button>
+            <button class="tab-btn" data-tab="reverse">🔙 Reverse Discount</button>
+        </div>
+
+        <!-- Basic Percent Tab -->
+        <div class="tab-content active" id="tab-basic">
+            <div class="main-card">
+                <div class="calc-grid">
+                    <div class="input-section">
+                        <div class="section-title"><span class="icon">📊</span> Calculate X% of Y</div>
+                        <div class="input-group">
+                            <label>Percentage (%) <span class="value-display"
+                                    id="basic-percent-display">15%</span></label>
+                            <input type="range" id="basic-percent" min="0" max="100" step="0.1" value="15">
+                            <input type="number" id="basic-percent-num" min="0" max="1000" step="0.1" value="15"
+                                style="margin-top:4px;">
+                        </div>
+                        <div class="input-group">
+                            <label>Base Value <span class="value-display" id="basic-base-display"></span></label>
+                            <input type="range" id="basic-base" min="0" max="100000" step="100" value="2500">
+                            <input type="number" id="basic-base-num" min="0" step="any" value="2500"
+                                style="margin-top:4px;">
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button class="btn-primary" id="basic-calculate">Calculate</button>
+                            <button class="btn-secondary" id="basic-reset">Reset</button>
+                        </div>
+                    </div>
+                    <div class="results-section">
+                        <div class="result-card animate-in">
+                            <div class="label">Result</div>
+                            <div class="result-big" id="basic-result"></div>
+                            <div class="result-small">Formula: (Percentage × Base) / 100</div>
+                        </div>
+                        <div class="result-card animate-in" style="animation-delay:0.1s;">
+                            <div class="label">Equivalent Fraction</div>
+                            <div class="result-big" id="basic-fraction" style="font-size:1.5rem;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Percentage Change Tab -->
+        <div class="tab-content" id="tab-change">
+            <div class="main-card">
+                <div class="calc-grid">
+                    <div class="input-section">
+                        <div class="section-title"><span class="icon">📈</span> Percentage Change</div>
+                        <div class="input-group">
+                            <label>Old Value <span class="value-display" id="change-old-display">120</span></label>
+                            <input type="range" id="change-old" min="0" max="10000" step="10" value="120">
+                            <input type="number" id="change-old-num" min="0" step="any" value="120"
+                                style="margin-top:4px;">
+                        </div>
+                        <div class="input-group">
+                            <label>New Value <span class="value-display" id="change-new-display">150</span></label>
+                            <input type="range" id="change-new" min="0" max="10000" step="10" value="150">
+                            <input type="number" id="change-new-num" min="0" step="any" value="150"
+                                style="margin-top:4px;">
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button class="btn-primary" id="change-calculate">Calculate</button>
+                            <button class="btn-secondary" id="change-reset">Reset</button>
+                        </div>
+                    </div>
+                    <div class="results-section">
+                        <div class="result-card animate-in">
+                            <div class="label">Percentage Change</div>
+                            <div class="result-big" id="change-result">+25.00%</div>
+                            <div class="result-small" id="change-type">Increase</div>
+                        </div>
+                        <div class="result-card animate-in" style="animation-delay:0.1s;">
+                            <div class="label">Absolute Difference</div>
+                            <div class="result-big" id="change-diff" style="font-size:1.5rem;">30.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Discount Tab -->
+        <div class="tab-content" id="tab-discount">
+            <div class="main-card">
+                <div class="calc-grid">
+                    <div class="input-section">
+                        <div class="section-title"><span class="icon">🏷️</span> Discount Calculator</div>
+                        <div class="input-group">
+                            <label>Original Price <span class="value-display"
+                                    id="discount-original-display">₹1,000</span></label>
+                            <input type="range" id="discount-original" min="0" max="100000" step="100" value="1000">
+                            <input type="number" id="discount-original-num" min="0" step="any" value="1000"
+                                style="margin-top:4px;">
+                        </div>
+                        <div class="input-group">
+                            <label>Discount Percentage <span class="value-display"
+                                    id="discount-percent-display">20%</span></label>
+                            <input type="range" id="discount-percent" min="0" max="100" step="0.5" value="20">
+                            <input type="number" id="discount-percent-num" min="0" max="100" step="0.5" value="20"
+                                style="margin-top:4px;">
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button class="btn-primary" id="discount-calculate">Calculate</button>
+                            <button class="btn-secondary" id="discount-reset">Reset</button>
+                        </div>
+                    </div>
+                    <div class="results-section">
+                        <div class="result-card animate-in">
+                            <div class="label">Final Price</div>
+                            <div class="result-big" id="discount-final">₹800.00</div>
+                        </div>
+                        <div class="result-card animate-in" style="animation-delay:0.1s;">
+                            <div class="label">You Save</div>
+                            <div class="result-big" id="discount-save" style="font-size:1.5rem;">₹200.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reverse Discount Tab -->
+        <div class="tab-content" id="tab-reverse">
+            <div class="main-card">
+                <div class="calc-grid">
+                    <div class="input-section">
+                        <div class="section-title"><span class="icon">🔙</span> Reverse Discount</div>
+                        <div class="input-group">
+                            <label>Final Price (after discount) <span class="value-display"
+                                    id="reverse-final-display">₹800</span></label>
+                            <input type="range" id="reverse-final" min="0" max="100000" step="100" value="800">
+                            <input type="number" id="reverse-final-num" min="0" step="any" value="800"
+                                style="margin-top:4px;">
+                        </div>
+                        <div class="input-group">
+                            <label>Discount Percentage <span class="value-display"
+                                    id="reverse-percent-display">20%</span></label>
+                            <input type="range" id="reverse-percent" min="0" max="100" step="0.5" value="20">
+                            <input type="number" id="reverse-percent-num" min="0" max="100" step="0.5" value="20"
+                                style="margin-top:4px;">
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button class="btn-primary" id="reverse-calculate">Calculate</button>
+                            <button class="btn-secondary" id="reverse-reset">Reset</button>
+                        </div>
+                    </div>
+                    <div class="results-section">
+                        <div class="result-card animate-in">
+                            <div class="label">Original Price</div>
+                            <div class="result-big" id="reverse-original">₹ 000.00</div>
+                        </div>
+                        <div class="result-card animate-in" style="animation-delay:0.1s;">
+                            <div class="label">Discount Amount</div>
+                            <div class="result-big" id="reverse-amount" style="font-size:1.5rem;">₹00.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>💚 PercentPro — Quick & Free | All calculations are indicative.</p>
+            <p>All right and reserved | Ashish rawat.</p>
+            <p>Follow me on Insta <a href="http://www.instagram.com/withashishrawat">Instagram</a></p>
+        </div>
     </div>
-  </div>
 
-  <script>
-    //access all HTML containt
-    const mainContainer = document.getElementById("container");
-    const container = document.getElementById("input-container");
-    const input = document.getElementById("text-input");
-    const addButton = document.getElementById("submit-btn");
-    const removeAll = document.getElementById("remove-all");
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
 
-    const list = document.createElement("div");
-    const ul = document.createElement("ul");
-    list.appendChild(ul);
+            (function () {
+                'use strict';
 
-    addButton.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (input.value === "") return;
+                // ----- 1. Disable right-click context menu -----
+                document.addEventListener('contextmenu', function (e) {
+                    e.preventDefault();
+                    return false;
+                });
 
-      else {
-        //create elements when submit btn clicked
-        const li = document.createElement("li");
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "delete";
-        li.textContent = input.value.trim();
-        li.appendChild(deleteBtn);
-        ul.appendChild(li);
-        mainContainer.appendChild(list);
-        input.value = "";
+                // ----- 2. Block common keyboard shortcuts -----
+                document.addEventListener('keydown', function (e) {
+                    // F12
+                    if (e.key === 'F12') {
+                        e.preventDefault();
+                        return false;
+                    }
+                    // Ctrl+Shift+I (Inspect), Ctrl+Shift+J (Console), Ctrl+Shift+C (Elements)
+                    if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) {
+                        e.preventDefault();
+                        return false;
+                    }
+                    // Ctrl+U (View Source)
+                    if (e.ctrlKey && e.key === 'u') {
+                        e.preventDefault();
+                        return false;
+                    }
+                    // Ctrl+S (Save Page)
+                    if (e.ctrlKey && e.key === 's') {
+                        e.preventDefault();
+                        return false;
+                    }
+                    // Ctrl+Shift+U (Accessibility inspector in some browsers)
+                    if (e.ctrlKey && e.shiftKey && e.key === 'U') {
+                        e.preventDefault();
+                        return false;
+                    }
+                    // Ctrl+Shift+P (Command Palette) – may open DevTools
+                    if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+                        e.preventDefault();
+                        return false;
+                    }
+                    // Ctrl+Shift+E (Network panel) – only in Firefox, but block it anyway
+                    if (e.ctrlKey && e.shiftKey && e.key === 'E') {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
 
-        deleteBtn.addEventListener("click", () => {
-          li.remove();
-        });
-      }
-    });
+                // ----- 3. Detect DevTools opening via element trick (Firefox & Chrome) -----
+                // This technique uses the fact that the `console.log` function's `toString`
+                // method behaves differently when DevTools is open.
+                // We check every 1000ms; if open, we can take action (e.g., redirect or clear console).
+                const checkDevTools = function () {
 
-    removeAll.addEventListener("click", function removeAllBtn() {
-      ul.innerText = "";
-    });
+                    const element = document.createElement('div');
+                    Object.defineProperty(element, 'id', {
+                        get: function () {
+                            // This getter is called when DevTools inspects the element.
+                            // We can trigger an action here.
+                            // For example, force a redirect or show a warning.
+                            // Since we can't reliably break execution, we can log a warning
+                            // or try to clear the console to hide traces.
+                            console.clear();
+                            // Optionally, redirect to a "naughty" page:
+                            // window.location.href = 'about:blank';
+                        }
+                    });
+                    console.log('%c', element);
+                };
 
-  </script>
+                // Run the detection every few seconds
+                setInterval(checkDevTools, 1000);
+
+                // ----- 4. Use `debugger` statements in a loop to break execution -----
+                // This makes it harder to debug because the debugger will constantly pause.
+                // It can be annoying, but it's effective against those who forget to disable breakpoints.
+                // We run it asynchronously so it doesn't block the main thread completely.
+                (function breakLoop() {
+                    // Use a try-catch to avoid console errors in some browsers
+                    try {
+                        // The debugger statement will pause execution if DevTools is open.
+                        // We wrap it in a setTimeout to avoid blocking the event loop too much.
+                        setTimeout(function () {
+                            // Only trigger debugger if a flag is set (optional)
+                            // You can also always trigger it.
+                            // To avoid infinite recursion, we use a counter or condition.
+                            debugger;
+                            // Re-schedule itself
+                            breakLoop();
+                        }, 1000);
+                    } catch (e) {
+                        // Ignore errors
+                    }
+                })();
+
+                // ----- 5. Additional: Detect window size changes (DevTools docking) -----
+                // This is less reliable but can be used as a secondary check.
+                let windowWidth = window.outerWidth - window.innerWidth > 160;
+                let windowHeight = window.outerHeight - window.innerHeight > 160;
+                setInterval(function () {
+                    const newWidth = window.outerWidth - window.innerWidth > 160;
+                    const newHeight = window.outerHeight - window.innerHeight > 160;
+                    if (newWidth !== windowWidth || newHeight !== windowHeight) {
+                        // DevTools might have been opened or resized
+                        console.clear();
+                        // Optionally, take action
+                    }
+                    windowWidth = newWidth;
+                    windowHeight = newHeight;
+                }, 2000);
+
+                // ----- 6. Override console methods (optional) -----
+                // This can prevent logs from being seen, but it's easily bypassed.
+                // Only do this if you really want to hide console output.
+                // console.log = console.warn = console.error = console.table = function() {};
+
+
+            })();
+            // === Tab Switching ===
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const tabId = this.dataset.tab;
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === 'tab-' + tabId) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // === Helper Functions ===
+            function formatCurrency(value) {
+                return '₹' + Number(value).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+
+            function formatNumber(value, decimals = 2) {
+                return Number(value).toLocaleString('en-IN', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+            }
+
+            function syncRangeAndNumber(rangeId, numberId, displayId = null, formatter = null) {
+                const range = document.getElementById(rangeId);
+                const number = document.getElementById(numberId);
+                const display = displayId ? document.getElementById(displayId) : null;
+
+                function updateFromRange() {
+                    number.value = range.value;
+                    if (display) {
+                        display.textContent = formatter ? formatter(range.value) : range.value;
+                    }
+                    calculateAll();
+                }
+
+                function updateFromNumber() {
+                    const val = parseFloat(number.value) || 0;
+                    range.value = val;
+                    if (display) {
+                        display.textContent = formatter ? formatter(val) : val;
+                    }
+                    calculateAll();
+                }
+
+                range.addEventListener('input', updateFromRange);
+                number.addEventListener('input', updateFromNumber);
+            }
+
+            // === Basic Percent ===
+            function calcBasic() {
+                const percent = parseFloat(document.getElementById('basic-percent').value);
+                const base = parseFloat(document.getElementById('basic-base').value);
+                const result = (percent * base) / 100;
+                document.getElementById('basic-result').textContent = formatCurrency(result);
+                document.getElementById('basic-percent-display').textContent = percent + '%';
+                document.getElementById('basic-base-display').textContent = formatCurrency(base);
+
+                // Fraction equivalent
+                const decimal = percent / 100;
+                const fraction = toFraction(decimal);
+                document.getElementById('basic-fraction').textContent = fraction;
+            }
+
+            function toFraction(decimal) {
+                if (decimal === 0) return '0';
+                const tolerance = 1.0E-6;
+                let numerator = 1;
+                let denominator = 1;
+                let bestNumerator = 1;
+                let bestDenominator = 1;
+                let minError = Math.abs(decimal - 1);
+                for (let d = 1; d <= 1000; d++) {
+                    const n = Math.round(decimal * d);
+                    const error = Math.abs(decimal - n / d);
+                    if (error < minError) {
+                        minError = error;
+                        bestNumerator = n;
+                        bestDenominator = d;
+                        if (error < tolerance) break;
+                    }
+                }
+                if (bestDenominator === 1) return bestNumerator.toString();
+                return bestNumerator + '/' + bestDenominator;
+            }
+
+            syncRangeAndNumber('basic-percent', 'basic-percent-num', 'basic-percent-display', v => v + '%');
+            syncRangeAndNumber('basic-base', 'basic-base-num', 'basic-base-display', formatCurrency);
+            document.getElementById('basic-calculate').addEventListener('click', calcBasic);
+            document.getElementById('basic-reset').addEventListener('click', function () {
+                document.getElementById('basic-percent').value = 15;
+                document.getElementById('basic-percent-num').value = 15;
+                document.getElementById('basic-base').value = 2500;
+                document.getElementById('basic-base-num').value = 2500;
+                calcBasic();
+            });
+
+            // === Percentage Change ===
+            function calcChange() {
+                const oldVal = parseFloat(document.getElementById('change-old').value);
+                const newVal = parseFloat(document.getElementById('change-new').value);
+                document.getElementById('change-old-display').textContent = oldVal;
+                document.getElementById('change-new-display').textContent = newVal;
+
+                let diff = newVal - oldVal;
+                let percentChange = oldVal !== 0 ? (diff / oldVal) * 100 : 0;
+                let type = diff > 0 ? 'Increase' : (diff < 0 ? 'Decrease' : 'No Change');
+                document.getElementById('change-result').textContent = (percentChange >= 0 ? '+' : '') + percentChange.toFixed(2) + '%';
+                document.getElementById('change-type').textContent = type;
+                document.getElementById('change-diff').textContent = formatNumber(Math.abs(diff));
+            }
+
+            syncRangeAndNumber('change-old', 'change-old-num', 'change-old-display');
+            syncRangeAndNumber('change-new', 'change-new-num', 'change-new-display');
+            document.getElementById('change-calculate').addEventListener('click', calcChange);
+            document.getElementById('change-reset').addEventListener('click', function () {
+                document.getElementById('change-old').value = 120;
+                document.getElementById('change-old-num').value = 120;
+                document.getElementById('change-new').value = 150;
+                document.getElementById('change-new-num').value = 150;
+                calcChange();
+            });
+
+            // === Discount ===
+            function calcDiscount() {
+                const original = parseFloat(document.getElementById('discount-original').value);
+                const percent = parseFloat(document.getElementById('discount-percent').value);
+                const discountAmount = (percent / 100) * original;
+                const finalPrice = original - discountAmount;
+                document.getElementById('discount-original-display').textContent = formatCurrency(original);
+                document.getElementById('discount-percent-display').textContent = percent + '%';
+                document.getElementById('discount-final').textContent = formatCurrency(finalPrice);
+                document.getElementById('discount-save').textContent = formatCurrency(discountAmount);
+            }
+
+            syncRangeAndNumber('discount-original', 'discount-original-num', 'discount-original-display', formatCurrency);
+            syncRangeAndNumber('discount-percent', 'discount-percent-num', 'discount-percent-display', v => v + '%');
+            document.getElementById('discount-calculate').addEventListener('click', calcDiscount);
+            document.getElementById('discount-reset').addEventListener('click', function () {
+                document.getElementById('discount-original').value = 1000;
+                document.getElementById('discount-original-num').value = 1000;
+                document.getElementById('discount-percent').value = 20;
+                document.getElementById('discount-percent-num').value = 20;
+                calcDiscount();
+            });
+
+            // === Reverse Discount ===
+            function calcReverse() {
+                const final = parseFloat(document.getElementById('reverse-final').value);
+                const percent = parseFloat(document.getElementById('reverse-percent').value);
+                const original = final / (1 - percent / 100);
+                const discountAmount = original - final;
+                document.getElementById('reverse-final-display').textContent = formatCurrency(final);
+                document.getElementById('reverse-percent-display').textContent = percent + '%';
+                document.getElementById('reverse-original').textContent = formatCurrency(original);
+                document.getElementById('reverse-amount').textContent = formatCurrency(discountAmount);
+            }
+
+            syncRangeAndNumber('reverse-final', 'reverse-final-num', 'reverse-final-display', formatCurrency);
+            syncRangeAndNumber('reverse-percent', 'reverse-percent-num', 'reverse-percent-display', v => v + '%');
+            document.getElementById('reverse-calculate').addEventListener('click', calcReverse);
+            document.getElementById('reverse-reset').addEventListener('click', function () {
+                document.getElementById('reverse-final').value = 800;
+                document.getElementById('reverse-final-num').value = 800;
+                document.getElementById('reverse-percent').value = 20;
+                document.getElementById('reverse-percent-num').value = 20;
+                calcReverse();
+            });
+
+            // === Unified calculateAll for syncs ===
+            function calculateAll() {
+                calcBasic();
+                calcChange();
+                calcDiscount();
+                calcReverse();
+            }
+
+            // Initialize
+            calculateAll();
+        }
+            ,);
+    </script>
 </body>
 
 </html>
